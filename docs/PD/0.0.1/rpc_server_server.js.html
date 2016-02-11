@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>rpc/server/server.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~create">create</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandoserver">comando server</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li><li><a href="global.html#Node">Node</a></li><li><a href="global.html#start">start</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">rpc/server/server.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Script server para instanciar un servidor que escucha mensajes de lectura y escritura de clientes
+ * @module rpc/server
+ */
+
+var dnode = require('dnode'),
+    fs = require('fs'),
+    path = require('path'),
+    program = require('commander');
+
+/**
+ * Comando para leer un archivo remoto
+ * @function comando server
+ * @param port -p | --port Puerto (OPCIONAL)
+ */
+program
+    .option('-p, --port &lt;p>', 'Puerto', parseInt)
+    .description('leer remotamente un archivo')
+    .parse(process.argv);
+
+program.port = program.port || 3000;
+
+/**
+ * Instancia server
+ * @name server
+ * @extends dnode
+ */
+var server = dnode({
+    /**
+     * Metodo remoto read que permite leer un archivo local utilizando un buffer.
+     * @function
+     * @param  {string}   fileName Filepath del archivo
+     * @param  {int}   length   Longitud del buffer de lectura
+     * @param  {Function} cb       Funcion callback para retornar el resultado
+     */
+    read: function (fileName, length, cb) {
+        debugger;
+        // con path.join puedo concatenar paths sin tenerme que preocupar si estoy en windows manejando '\' o en linux usando '/'
+        fileName = path.join(__dirname, fileName);
+        fs.open(fileName, 'r', function (err, fd) {
+            if (err) {
+                cb(undefined, undefined, err);
+            } else {
+                var buffer = new Buffer(length);
+                // funcion de fs para leer datos de un archivo mediante un buffer
+                fs.read(fd, buffer, 0, buffer.length, null, function (err, bytesRead, buffer) {
+                    if (err) {
+                        cb(undefined, undefined, err);
+                    } else {
+                        var mensaje = 'Se realizo una lectura sobre el archivo: ' + fileName;
+                        console.log(mensaje);
+                        cb(mensaje, bytesRead);
+                    }
+                });
+            }
+            // cierro el archivo
+            fs.close(fd)
+        });
+    },
+    /**
+     * Metodo remoto write que permite escribir un string en un archivo local utilizando un buffer.
+     * @function
+     * @param  {string}   fileName Filepath del archivo
+     * @param  {string}   data     Datos a escribir en el archivo
+     * @param  {Function} cb       Funcion callback para retornar el resultado
+     */
+    write: function (fileName, data, cb) {
+        // con path.join puedo concatenar paths sin tenerme que preocupar si estoy en windows manejando '\' o en linux usando '/'
+        fileName = path.join(__dirname, fileName);
+        // abro el archivo en modo appending
+        fs.open(fileName, 'a', function (err, fd) {
+            if (err) {
+                cb(err);
+            } else {
+                var buffer = new Buffer(data);
+                // funcion de fs para escribir datos en un archivo mediante un buffer
+                fs.write(fd, buffer, 0, buffer.length, null, function (err, bytesWrited) {
+                    var mensaje = err || 'Se escribieron ' + bytesWrited + ' bytes sobre el archivo: ' + path.basename(fileName);
+                    console.log(mensaje);
+                    cb(mensaje);
+                });
+            }
+            // cierro el archivo
+            fs.close(fd)
+        });
+    }
+});
+// inicio el servidor a "escuchar" en el puerto 3000
+server.listen(program.port);
+
+console.log('Servidor ejecutandose en el puerto ' + program.port);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Feb 10 2016 21:35:21 GMT-0300 (ART) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

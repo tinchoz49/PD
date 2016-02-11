@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>mw/manager.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~create">create</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandoserver">comando server</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li><li><a href="global.html#Node">Node</a></li><li><a href="global.html#start">start</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">mw/manager.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>var net = require('net'),
+    actorify = require('actorify');
+ 
+/**
+ * Function Object para instanciar objetos llamados Node.
+ * Un objeto Node actua como interfaz adaptador, para que el Manager pueda comunicarse con los Workers.
+ * @param {Manager} manager Objeto Manager que necesita conocer el Worker asi sabe a quien responder cuando necesita enviar un mensaje.
+ * @param {int} pid     pid del Worker para identificarlo en la red. Utilizar el pid para identificar un worker en una red no es la mejor opcion pero lo implemente asi para no complicar el ejercicio.
+ */
+var Node = function Node(manager, pid) {
+  var self = this;
+  this.manager = manager;
+  this.actor = manager.actor;
+  this.pid = pid;
+  /**
+   * Metodo del objeto Node que se encarga de comunicarse con el Worker asociado para avisarle que comience a trabajar.
+   * @param  {int} value Numero de donde partir a calcular fibonacci
+   * @param  {int} times Cantidad de pruebas
+   */
+  this.start = function (value, times) {
+    // envio un mensaje: start &lt;pid>. Esto hara que solo reciba el mensaje de start worker asociado a ese pid.
+    this.actor.send('start '+self.pid, value, times);
+    // declaro un funcion callback que se ejecuta cuando recibo un mensaje 'result' de algun Worker.
+    this.actor.on('result', function(pid, result, finish) {
+      console.log('Resultado del worker '+pid+': ');
+      console.log(result);
+      // si el worker me dice que termino le envio un ultimo mensaje dandole permiso a que termine su ejecucion y lo elimino de mi lista de nodos activos.
+      if (finish) {
+        self.actor.send('end '+pid);
+        self.manager.nodes.splice(self.manager.nodes.indexOf(self), 1);
+        console.log('Worker '+pid+' termino!');
+        // si ya no tengo nodos activos significa que termino la tarea en todos mis workers y por ende termino el trabajo.
+        if (self.manager.nodes.length == 0) {
+          console.log('Termino el trabajo para todos!');
+          process.exit(1);
+        }
+      }
+    });
+  };
+};
+
+/**
+ * Function Object que se exporta como modulo en Node.js y permite instanciar un objeto Manager
+ * @param  {int} port Puerto donde va a estar escuchando el servidor.
+ */
+module.exports = function Manager (port) {
+  var self = this;
+  this.port = port;
+  this.nodes = [];
+
+  // creo un servidor que retorna un socket en su callback el cual lo transformo en un actor.
+  net.createServer(function(sock){
+    self.actor = actorify(sock);
+
+    // declaro una funcion callback que se ejecuta cuando recibo un mensaje 'add' de alguno de los workers.
+    self.actor.on('add', function(workerPid){
+      // creo un objeto Node y lo agrego al listado de nodes activos
+      self.nodes.push(new Node(self, workerPid));
+    });
+  }).listen(this.port);
+
+  /**
+   * Metodo que permite comenzar la ejecucion de los workers conectados.
+   * @param  {int} value Numero de donde partir a calcular fibonacci
+   * @param  {int} times Cantidad de pruebas
+   * @return {boolean}       Retorna true si se puede ejecutar la tarea o false en caso contrario
+   */
+  this.start = function (value, times) {
+    if (self.nodes.length == 0) {
+      console.log('El Manager no encuentra Workers disponibles.');
+      return false;
+    }
+    // activo todos mis nodos
+    self.nodes.forEach(function (node) {
+      node.start(value, times);
+    });
+    return true;
+  };
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Feb 10 2016 21:35:21 GMT-0300 (ART) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
