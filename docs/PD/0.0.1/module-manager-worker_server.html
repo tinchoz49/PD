@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>manager-worker/server - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">manager-worker/server</h1>
     
 
     
@@ -40,9 +40,8 @@
 
 <header>
     
-        <h2>
         
-        </h2>
+            
         
     
 </header>
@@ -51,8 +50,24 @@
     <div class="container-overview">
     
         
+            <div class="description"><p>Script para instanciar un manager (server)</p></div>
+        
 
         
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -82,6 +97,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mw_server.js.html">mw/server.js</a>, <a href="mw_server.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
 
     
 
@@ -89,6 +109,20 @@
 
     
 </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         
@@ -115,14 +149,14 @@
 
     
 
-    <h4 class="name" id="fib"><span class="type-signature"></span>fib<span class="signature">(n)</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id="~comandodefault"><span class="type-signature">(inner) </span>comando default<span class="signature">(port)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Funcion para calcular fibonacci a partir de un numero</p>
+    <p>Crea un manager servidor para medir la perfomance de los workers</p>
 </div>
 
 
@@ -158,15 +192,10 @@
 
         <tr>
             
-                <td class="name"><code>n</code></td>
+                <td class="name"><code>port</code></td>
             
 
             <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
             
             </td>
 
@@ -174,7 +203,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>p | --port Puerto default=3000</p></td>
         </tr>
 
     
@@ -215,7 +244,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line11">line 11</a>
+        <a href="mw_server.js.html">mw/server.js</a>, <a href="mw_server.js.html#line9">line 9</a>
     </li></ul></dd>
     
 
@@ -238,28 +267,6 @@
 
 
 
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Resultado</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 

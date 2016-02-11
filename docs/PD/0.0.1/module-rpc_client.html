@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~create">create</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandoserver">comando server</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li><li><a href="global.html#Node">Node</a></li><li><a href="global.html#start">start</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Manager.html">Manager</a><ul class='methods'><li data-type='method'><a href="Manager.html#.this.start">this.start</a></li></ul></li><li><a href="Node.html">Node</a><ul class='methods'><li data-type='method'><a href="Node.html#.this.remove">this.remove</a></li><li data-type='method'><a href="Node.html#.this.start">this.start</a></li></ul></li><li><a href="Worker.html">Worker</a><ul class='methods'><li data-type='method'><a href="Worker.html#.this.add">this.add</a></li><li data-type='method'><a href="Worker.html#.this.calc">this.calc</a></li><li data-type='method'><a href="Worker.html#.this.remove">this.remove</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~comandodefault">comando default</a></li></ul></li><li><a href="module-manager-worker_server.html">manager-worker/server</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_server.html#~comandodefault">comando default</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandodefault">comando default</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li></ul>
 </nav>
 
 <div id="main">
@@ -149,7 +149,7 @@
 
     
 
-    <h4 class="name" id="~comandoread"><span class="type-signature">(inner) </span>comando read<span class="signature">(server, port, file, length)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~comandoread"><span class="type-signature">(inner) </span>comando read<span class="signature">(host, port, file, length)</span><span class="type-signature"></span></h4>
 
     
 
@@ -192,7 +192,7 @@
 
         <tr>
             
-                <td class="name"><code>server</code></td>
+                <td class="name"><code>host</code></td>
             
 
             <td class="type">
@@ -203,7 +203,7 @@
 
             
 
-            <td class="description last"><p>s | --server Server (OPCIONAL)</p></td>
+            <td class="description last"><p>h | --host Dirección del servidor default=localhost</p></td>
         </tr>
 
     
@@ -221,7 +221,7 @@
 
             
 
-            <td class="description last"><p>p | --port Puerto (OPCIONAL)</p></td>
+            <td class="description last"><p>p | --port Puerto default=3000</p></td>
         </tr>
 
     
@@ -329,7 +329,7 @@
 
     
 
-    <h4 class="name" id="~comandowrite"><span class="type-signature">(inner) </span>comando write<span class="signature">(server, port, file, data)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~comandowrite"><span class="type-signature">(inner) </span>comando write<span class="signature">(host, port, file, data)</span><span class="type-signature"></span></h4>
 
     
 
@@ -372,7 +372,7 @@
 
         <tr>
             
-                <td class="name"><code>server</code></td>
+                <td class="name"><code>host</code></td>
             
 
             <td class="type">
@@ -383,7 +383,7 @@
 
             
 
-            <td class="description last"><p>s | --server Server (OPCIONAL)</p></td>
+            <td class="description last"><p>h | --host Dirección del servidor default=localhost</p></td>
         </tr>
 
     
@@ -401,7 +401,7 @@
 
             
 
-            <td class="description last"><p>p | --port Puerto (OPCIONAL)</p></td>
+            <td class="description last"><p>p | --port Puerto default=3000</p></td>
         </tr>
 
     
@@ -478,7 +478,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_client_client.js.html">rpc/client/client.js</a>, <a href="rpc_client_client.js.html#line63">line 63</a>
+        <a href="rpc_client_client.js.html">rpc/client/client.js</a>, <a href="rpc_client_client.js.html#line66">line 66</a>
     </li></ul></dd>
     
 
@@ -522,7 +522,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Feb 10 2016 21:35:21 GMT-0300 (ART) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Feb 11 2016 14:41:52 GMT-0300 (ART) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

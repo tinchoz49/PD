@@ -23,7 +23,7 @@
 <label for="nav-trigger" class="overlay"></label>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~create">create</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandoserver">comando server</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li><li><a href="global.html#Node">Node</a></li><li><a href="global.html#start">start</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Manager.html">Manager</a><ul class='methods'><li data-type='method'><a href="Manager.html#.this.start">this.start</a></li></ul></li><li><a href="Node.html">Node</a><ul class='methods'><li data-type='method'><a href="Node.html#.this.remove">this.remove</a></li><li data-type='method'><a href="Node.html#.this.start">this.start</a></li></ul></li><li><a href="Worker.html">Worker</a><ul class='methods'><li data-type='method'><a href="Worker.html#.this.add">this.add</a></li><li data-type='method'><a href="Worker.html#.this.calc">this.calc</a></li><li data-type='method'><a href="Worker.html#.this.remove">this.remove</a></li></ul></li></ul><h3>Modules</h3><ul><li><a href="module-manager-worker_client.html">manager-worker/client</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_client.html#~comandodefault">comando default</a></li></ul></li><li><a href="module-manager-worker_server.html">manager-worker/server</a><ul class='methods'><li data-type='method'><a href="module-manager-worker_server.html#~comandodefault">comando default</a></li></ul></li><li><a href="module-rpc_client.html">rpc/client</a><ul class='methods'><li data-type='method'><a href="module-rpc_client.html#~comandoread">comando read</a></li><li data-type='method'><a href="module-rpc_client.html#~comandowrite">comando write</a></li></ul></li><li><a href="module-rpc_server.html">rpc/server</a><ul class='methods'><li data-type='method'><a href="module-rpc_server.html#~comandodefault">comando default</a></li><li data-type='method'><a href="module-rpc_server.html#~read">read</a></li><li data-type='method'><a href="module-rpc_server.html#~write">write</a></li></ul></li></ul><h3>Global</h3><ul><li><a href="global.html#fib">fib</a></li></ul>
 </nav>
 
 <div id="main">
@@ -40,10 +40,11 @@
         <article>
             <pre class="prettyprint source linenums"><code>var net = require('net'),
     actorify = require('actorify');
- 
+
 /**
- * Function Object para instanciar objetos llamados Node.
+ * Abstraccion del worker para que el Manager opere con un entidad estandar.
  * Un objeto Node actua como interfaz adaptador, para que el Manager pueda comunicarse con los Workers.
+ * @class Node
  * @param {Manager} manager Objeto Manager que necesita conocer el Worker asi sabe a quien responder cuando necesita enviar un mensaje.
  * @param {int} pid     pid del Worker para identificarlo en la red. Utilizar el pid para identificar un worker en una red no es la mejor opcion pero lo implemente asi para no complicar el ejercicio.
  */
@@ -52,8 +53,11 @@ var Node = function Node(manager, pid) {
   this.manager = manager;
   this.actor = manager.actor;
   this.pid = pid;
+
   /**
    * Metodo del objeto Node que se encarga de comunicarse con el Worker asociado para avisarle que comience a trabajar.
+   * @function
+   * @memberof Node
    * @param  {int} value Numero de donde partir a calcular fibonacci
    * @param  {int} times Cantidad de pruebas
    */
@@ -72,15 +76,27 @@ var Node = function Node(manager, pid) {
         // si ya no tengo nodos activos significa que termino la tarea en todos mis workers y por ende termino el trabajo.
         if (self.manager.nodes.length == 0) {
           console.log('Termino el trabajo para todos!');
-          process.exit(1);
+          process.exit();
         }
       }
     });
   };
+
+  /**
+   * Metodo para que la actual instancia de Node se elimine de la lista de workers.
+   * @function
+   * @memberof Node
+   */
+  this.remove = function() {
+    self.manager.nodes.splice(self.manager.nodes.indexOf(self), 1);
+    self.actor.send('removed '+self.pid);
+    console.log('El worker ' + self.pid + ' se desconecto.');
+  };
 };
 
 /**
- * Function Object que se exporta como modulo en Node.js y permite instanciar un objeto Manager
+ * Manager encargado de ejecutar un servidor, procesar workers y distribuir los trabajos a cada worker
+ * @class Manager
  * @param  {int} port Puerto donde va a estar escuchando el servidor.
  */
 module.exports = function Manager (port) {
@@ -97,10 +113,23 @@ module.exports = function Manager (port) {
       // creo un objeto Node y lo agrego al listado de nodes activos
       self.nodes.push(new Node(self, workerPid));
     });
+
+    // declaro una funcion callback que se ejecuta cuando recibo un mensaje 'remove' de alguno de los workers.
+    self.actor.on('remove', function(workerPid){
+      // retorno un array de nodos con todos los nodos que son distintos al node que quiere salir
+      var node = self.nodes.find(function (node) {
+        return (node.pid === workerPid);
+      });
+      if (node) {
+        node.remove();
+      }
+    });
   }).listen(this.port);
 
   /**
    * Metodo que permite comenzar la ejecucion de los workers conectados.
+   * @function
+   * @memberof Manager
    * @param  {int} value Numero de donde partir a calcular fibonacci
    * @param  {int} times Cantidad de pruebas
    * @return {boolean}       Retorna true si se puede ejecutar la tarea o false en caso contrario
@@ -116,7 +145,8 @@ module.exports = function Manager (port) {
     });
     return true;
   };
-};</code></pre>
+};
+</code></pre>
         </article>
     </section>
 
@@ -128,7 +158,7 @@ module.exports = function Manager (port) {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Wed Feb 10 2016 21:35:21 GMT-0300 (ART) using the Minami theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.0</a> on Thu Feb 11 2016 14:41:52 GMT-0300 (ART) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

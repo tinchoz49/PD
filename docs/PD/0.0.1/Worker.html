@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>rpc/server - Documentation</title>
+    <title>Worker - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">rpc/server</h1>
+    <h1 class="page-title">Worker</h1>
     
 
     
@@ -40,8 +40,9 @@
 
 <header>
     
-        
-            
+        <h2>
+        Worker
+        </h2>
         
     
 </header>
@@ -50,189 +51,17 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Script server para instanciar un servidor que escucha mensajes de lectura y escritura de clientes</p></div>
-        
-
-        
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
 
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_server_server.js.html">rpc/server/server.js</a>, <a href="rpc_server_server.js.html#line1">line 1</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="~server"><span class="type-signature">(inner) </span>server<span class="type-signature"> :dnode</span></h4>
-
-
-
-
-<div class="description">
-    <p>Instancia server</p>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">dnode</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_server_server.js.html">rpc/server/server.js</a>, <a href="rpc_server_server.js.html#line23">line 23</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="~comandodefault"><span class="type-signature">(inner) </span>comando default<span class="signature">(port)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Worker"><span class="type-signature"></span>new Worker<span class="signature">(host, port, clientPid)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Comando para iniciar el servidor</p>
+    <p>Function Object que se exporta como modulo en Node.js y permite instanciar un objeto Worker</p>
 </div>
 
 
@@ -268,133 +97,7 @@
 
         <tr>
             
-                <td class="name"><code>port</code></td>
-            
-
-            <td class="type">
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>p | --port Puerto default=3000</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_server_server.js.html">rpc/server/server.js</a>, <a href="rpc_server_server.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="~read"><span class="type-signature">(inner) </span>read<span class="signature">(fileName, length, cb)</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Metodo remoto read que permite leer un archivo local utilizando un buffer.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>fileName</code></td>
+                <td class="name"><code>host</code></td>
             
 
             <td class="type">
@@ -410,14 +113,14 @@
 
             
 
-            <td class="description last"><p>Filepath del archivo</p></td>
+            <td class="description last"><p>Dirección del servidor</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>length</code></td>
+                <td class="name"><code>port</code></td>
             
 
             <td class="type">
@@ -433,20 +136,20 @@
 
             
 
-            <td class="description last"><p>Longitud del buffer de lectura</p></td>
+            <td class="description last"><p>Puerto del servidor</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>cb</code></td>
+                <td class="name"><code>clientPid</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">int</span>
 
 
             
@@ -456,7 +159,7 @@
 
             
 
-            <td class="description last"><p>Funcion callback para retornar el resultado</p></td>
+            <td class="description last"><p>Pid del proceso cliente</p></td>
         </tr>
 
     
@@ -497,7 +200,107 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_server_server.js.html">rpc/server/server.js</a>, <a href="rpc_server_server.js.html#line36">line 36</a>
+        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.add"><span class="type-signature">(static) </span>this.add<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Metodo del Worker para incorporarse al Manager</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line36">line 36</a>
     </li></ul></dd>
     
 
@@ -528,14 +331,14 @@
 
     
 
-    <h4 class="name" id="~write"><span class="type-signature">(inner) </span>write<span class="signature">(fileName, data, cb)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".this.calc"><span class="type-signature">(static) </span>this.calc<span class="signature">(value, times)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Metodo remoto write que permite escribir un string en un archivo local utilizando un buffer.</p>
+    <p>Metodo del Worker para calcular fibonacci una x cantidad de veces, mientras analiza el consumo de memoria y procesamiento de la operacion en curso.</p>
 </div>
 
 
@@ -571,13 +374,13 @@
 
         <tr>
             
-                <td class="name"><code>fileName</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
@@ -587,20 +390,20 @@
 
             
 
-            <td class="description last"><p>Filepath del archivo</p></td>
+            <td class="description last"><p>Numero de donde partir a calcular fibonacci</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>data</code></td>
+                <td class="name"><code>times</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">int</span>
 
 
             
@@ -610,30 +413,7 @@
 
             
 
-            <td class="description last"><p>Datos a escribir en el archivo</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>cb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Funcion callback para retornar el resultado</p></td>
+            <td class="description last"><p>Cantidad de pruebas</p></td>
         </tr>
 
     
@@ -674,7 +454,89 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="rpc_server_server.js.html">rpc/server/server.js</a>, <a href="rpc_server_server.js.html#line67">line 67</a>
+        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line72">line 72</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.remove"><span class="type-signature">(static) </span>this.remove<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Metodo del Worker para salir del listado de nodos del servidor.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line55">line 55</a>
     </li></ul></dd>
     
 

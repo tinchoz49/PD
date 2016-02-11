@@ -4,7 +4,8 @@ var net = require('net'),
 
 /**
  * Funcion para calcular fibonacci a partir de un numero
- * @param  {int} n 
+ * @function
+ * @param  {int} n
  * @return {int}   Resultado
  */
 function fib(n) {
@@ -16,17 +17,21 @@ function fib(n) {
 
 /**
  * Function Object que se exporta como modulo en Node.js y permite instanciar un objeto Worker
- * @param  {int} serverPort Puerto del servidor
+ * @class Worker
+ * @param  {string} host Dirección del servidor
+ * @param  {int} port Puerto del servidor
  * @param  {int} clientPid  Pid del proceso cliente
  */
-module.exports = function Worker (serverPort, clientPid) {
+module.exports = function Worker (host, port, clientPid) {
   var self = this;
   // me conecto al servidor y transformo el socket en un Actor.
-  this.server = actorify(net.connect(serverPort));
+  this.server = actorify(net.connect({host: host, port: port}));
   this.pid = clientPid;
 
   /**
    * Metodo del Worker para incorporarse al Manager
+   * @function
+   * @memberof Worker
    */
   this.add = function () {
     // envia el mensaje 'add' al Manager para avisarle que quiere incorporarse a su listado de Workers.
@@ -38,12 +43,29 @@ module.exports = function Worker (serverPort, clientPid) {
     // define una funcion callback que se ejecuta una sola vez cuando recibe el mensaje 'end <actual_pid>'.
     this.server.once('end '+this.pid, function (value, times) {
       console.log('Termine!');
-      process.exit(1);
+      process.exit();
+    });
+  };
+
+  /**
+   * Metodo del Worker para salir del listado de nodos del servidor.
+   * @function
+   * @memberof Worker
+   */
+  this.remove = function () {
+    // envia el mensaje 'add' al Manager para avisarle que quiere incorporarse a su listado de Workers.
+    this.server.send('remove', this.pid);
+    // define una funcion callback que se ejecuta una sola vez cuando recibe el mensaje 'end <actual_pid>'.
+    this.server.once('removed '+this.pid, function (value, times) {
+      console.log('Me desconecte!');
+      process.exit();
     });
   };
 
   /**
    * Metodo del Worker para calcular fibonacci una x cantidad de veces, mientras analiza el consumo de memoria y procesamiento de la operacion en curso.
+   * @function
+   * @memberof Worker
    * @param  {int} value Numero de donde partir a calcular fibonacci
    * @param  {int} times Cantidad de pruebas
    */

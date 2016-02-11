@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>mw/server.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,250 +28,74 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">mw/server.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        <h2>
-        
-        </h2>
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="fib"><span class="type-signature"></span>fib<span class="signature">(n)</span><span class="type-signature"> &rarr; {int}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Funcion para calcular fibonacci a partir de un numero</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>n</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">int</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>Resultado</p>
-</div>
-
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">int</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Script para instanciar un manager (server)
+ * @module manager-worker/server
+ */
+var program = require('commander'),
+    Manager = require(__dirname + '/manager'),
+    inquirer = require("inquirer");
+
+/**
+ * Crea un manager servidor para medir la perfomance de los workers
+ * @function comando default
+ * @param port -p | --port Puerto default=3000
+ */
+program
+    .description('Crea un manager servidor para medir la perfomance de los workers')
+    .option('-p, --port &lt;n>', 'Puerto del servidor (default=3000)', parseInt)
+    .option('-f, --fib &lt;n>', 'Numero fibonacci', parseInt)
+    .option('-t, --times &lt;n>', 'Cantidad de pruebas', parseInt)
+    .parse(process.argv);
+
+program.port = program.port || 3000;
+
+// si no se cargan todas las opciones necesarias por consola, se muestra el informacion de ayuda y termina la ejecucion
+if (!program.fib || !program.times) program.help();
+
+// si se cargaron todas las opciones correctamente, se instancia el Manager y queda a la espera
+// de que el usuario active el Manager para distribuir la tarea entre los Workers conectados.
+console.log("Servidor iniciado en el puerto: " + program.port);
+
+// defino un array de preguntas para utilizar con el modulo inquiry
+var questions = [{
+    type: "confirm",
+    name: "start",
+    message: "Quiere comenzar las ejecucion de los workers",
+    default: false
+}];
+// instancia el Manager pasando al constructor un puerto
+var manager = new Manager(program.port);
+
+// defino una funcion para mostrar en la terminal la pregunta: Quiere comenzar las ejecucion de los workers?
+// si el manager.start retorna que no puede comenzar, vuelve a mostrar la pregunta.
+// si el usuario ingresa "no" entonces el servidor finaliza.
+function showPrompt() {
+    inquirer.prompt(questions, function (answers) {
+        if (answers.start) {
+            if (!manager.start(program.fib, program.times)) {
+                showPrompt();
+            }
+        } else {
+            process.exit();
+        }
+    });
+}
+
+showPrompt();
+</code></pre>
+        </article>
+    </section>
 
 
 

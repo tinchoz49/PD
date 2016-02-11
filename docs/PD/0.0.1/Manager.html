@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Global - Documentation</title>
+    <title>Manager - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -28,7 +28,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">Manager</h1>
     
 
     
@@ -41,7 +41,7 @@
 <header>
     
         <h2>
-        
+        Manager
         </h2>
         
     
@@ -52,77 +52,16 @@
     
         
 
-        
-
-
-<dl class="details">
-
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="fib"><span class="type-signature"></span>fib<span class="signature">(n)</span><span class="type-signature"> &rarr; {int}</span></h4>
+    <h4 class="name" id="Manager"><span class="type-signature"></span>new Manager<span class="signature">(port)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Funcion para calcular fibonacci a partir de un numero</p>
+    <p>Manager encargado de ejecutar un servidor, procesar workers y distribuir los trabajos a cada worker</p>
 </div>
 
 
@@ -158,7 +97,7 @@
 
         <tr>
             
-                <td class="name"><code>n</code></td>
+                <td class="name"><code>port</code></td>
             
 
             <td class="type">
@@ -174,7 +113,7 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>Puerto donde va a estar escuchando el servidor.</p></td>
         </tr>
 
     
@@ -215,7 +154,179 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="mw_worker.js.html">mw/worker.js</a>, <a href="mw_worker.js.html#line11">line 11</a>
+        <a href="mw_manager.js.html">mw/manager.js</a>, <a href="mw_manager.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".this.start"><span class="type-signature">(static) </span>this.start<span class="signature">(value, times)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Metodo que permite comenzar la ejecucion de los workers conectados.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Numero de donde partir a calcular fibonacci</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>times</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Cantidad de pruebas</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="mw_manager.js.html">mw/manager.js</a>, <a href="mw_manager.js.html#line97">line 97</a>
     </li></ul></dd>
     
 
@@ -242,7 +353,7 @@
 
         
 <div class="param-desc">
-    <p>Resultado</p>
+    <p>Retorna true si se puede ejecutar la tarea o false en caso contrario</p>
 </div>
 
 
@@ -253,7 +364,7 @@
     </dt>
     <dd>
         
-<span class="param-type">int</span>
+<span class="param-type">boolean</span>
 
 
     </dd>

@@ -9,12 +9,12 @@ var dnode = require('dnode'),
     program = require('commander');
 
 /**
- * Comando para leer un archivo remoto
- * @function comando server
- * @param port -p | --port Puerto (OPCIONAL)
+ * Comando para iniciar el servidor
+ * @function comando default
+ * @param port -p | --port Puerto default=3000
  */
 program
-    .option('-p, --port <p>', 'Puerto', parseInt)
+    .option('-p, --port <p>', 'Puerto (default=3000)', parseInt)
     .description('leer remotamente un archivo')
     .parse(process.argv);
 
@@ -23,7 +23,7 @@ program.port = program.port || 3000;
 /**
  * Instancia server
  * @name server
- * @extends dnode
+ * @type dnode
  */
 var server = dnode({
     /**
@@ -49,7 +49,7 @@ var server = dnode({
                     } else {
                         var mensaje = 'Se realizo una lectura sobre el archivo: ' + fileName;
                         console.log(mensaje);
-                        cb(mensaje, bytesRead);
+                        cb(buffer.toString(), bytesRead);
                     }
                 });
             }
@@ -85,7 +85,7 @@ var server = dnode({
         });
     }
 });
-// inicio el servidor a "escuchar" en el puerto 3000
+// inicio el servidor a "escuchar" en el puerto x
 server.listen(program.port);
 
 console.log('Servidor ejecutandose en el puerto ' + program.port);
