@@ -1,2 +1,2 @@
-dir: ['mw', 'rpc']
+dir: rpc
 packageJson: package.json
